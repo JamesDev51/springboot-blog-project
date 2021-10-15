@@ -14,33 +14,25 @@ import java.sql.Timestamp;
 @AllArgsConstructor
 @Builder
 @Entity
-public class User {
+public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
-    private String name;
+    @Column(nullable = false,length = 1000)
+    private String content;
 
-    @Column(nullable = false)
-    private String username;
+    @ManyToOne
+    @JoinColumn(name="boardId")
+    private Board board;
 
-    @Column(nullable = false)
-    private String password;
-
-    @Column(nullable = true)
-    private String phoneNumber;
-
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-
-    @Enumerated(EnumType.STRING)
-    private RoleType role;
+    @ManyToOne
+    @JoinColumn(name="userId")
+    private User user;
 
     @CreationTimestamp
-    private Timestamp joinedDate;
-
-
+    private Timestamp createdDate;
 
 
 }
