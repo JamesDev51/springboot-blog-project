@@ -7,13 +7,17 @@ const signUpPolicy =document.querySelector(".policyCheck");
 const signUpBtn = document.querySelector(".signUpBtn");
 const signUpDupCheckBtn=document.querySelector("#duplicationCheckBtn");
 const signUpEmailChecked=document.querySelector("#emailChecked");
+const signInBtn=document.querySelector(".loginBtn");
+const signInEmail=document.querySelector(".email");
+const signInPassword=document.querySelector(".password");
 
 let regPassword= /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
 let regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
 
 
 let index={
-    signUp:signUp()
+    signUp:signUp(),
+    signIn:signIn()
 }
 
 function regexCheck(reg, what, message) {
@@ -81,7 +85,7 @@ function handleSignUpBtnClick(){
         signUpPassword2.focus();
         return false;
     }
-    if(!regexCheck(regPassword,signUpPassword1,"패스워드는 4~12자의 영문 대소문자와 숫자로만 입력 가능합니다.")){
+    if(!regexCheck(regPassword,signUpPassword1,"비밀번호는 4~12자의 영문 대소문자와 숫자로만 입력 가능합니다.")){
         //패스워드1 유효성 검사
         return false;
     }
@@ -111,6 +115,7 @@ function handleSignUpBtnClick(){
       contentType: "application/json;charset=utf-8",
       dataType: "json"
     }).done(function(res){
+        console.log(res);
         if(res.status===500){
             alert("회원가입에 실패하였습니다.")
         }else{
@@ -177,5 +182,10 @@ function signUp(){
         signUpBtn.addEventListener("click",handleSignUpBtnClick)
     }
 }
+
+function signIn(){
+    return false;
+}
 index.signUp
+index.signIn
 

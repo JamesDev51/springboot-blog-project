@@ -1,14 +1,21 @@
 package com.jamesdev.blog.controller.api;
 
 import com.jamesdev.blog.dto.ResponseDto;
+import com.jamesdev.blog.dto.UserDto;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.service.UserService;
 import com.jamesdev.blog.vo.EmailVo;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.ui.Model;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
+import java.util.Map;
 
 @RestController
 public class UserApiController {
@@ -28,8 +35,24 @@ public class UserApiController {
         }
     }
     @PostMapping("/auth/api/signUp")
-    private ResponseDto<Integer>signUp(@RequestBody User user){
+    private ResponseDto<JSONObject>signUp(@Valid @RequestBody UserDto userDto, Errors errors, Model model){
+        model.addAttribute("userDto",userDto); //유효성 검사에 실패했을 때 입력 데이터 유지
+
+        if(errors.hasErrors()){
+            Map<String,String> validatorResult = userService.validateHandling(errors);
+            JSONObject validatorResultJson=new JSONObject(validatorResult);
+            return new ResponseDto<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), validatorResultJson);
+        }
+        //유효성 검사 통과
+        User user = User
+                .builder()
+                .name(userDto.getName())
+                .email(userDto.getEmail())
+                .password(userDto.getPassword())
+                .gender(userDto.getGender())
+                .build();
         userService.signUp(user);
-        return new ResponseDto<>(HttpStatus.OK.value(), 1);
+        JSONObject emptyJson=new JSONObject();
+        return new ResponseDto<>(HttpStatus.OK.value(), emptyJson);
     }
 }
