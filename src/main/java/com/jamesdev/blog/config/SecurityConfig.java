@@ -33,7 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-            auth.userDetailsService(principalDetailsService).passwordEncoder(bCryptPasswordEncoder());
+        auth.userDetailsService(principalDetailsService).passwordEncoder(bCryptPasswordEncoder());
     }
 
     @Bean
@@ -47,20 +47,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("", "/","/auth/**","/js/**","/css/**","/img/**").permitAll()
-                    .anyRequest().authenticated()
+                .antMatchers( "/","/auth/**","/js/**","/css/**","/img/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                    .formLogin()
-                    .loginPage("/auth/login")
-                    .successHandler(customAuthenticationSuccessHandler)
-                    .failureHandler(customAuthenticationFailureHandler)
-                    .loginProcessingUrl("/auth/api/login")
-                    .usernameParameter("email")
-                    .passwordParameter("password")
+                .formLogin()
+                .loginPage("/auth/login")
+                .successHandler(customAuthenticationSuccessHandler)
+                .failureHandler(customAuthenticationFailureHandler)
+                .loginProcessingUrl("/auth/api/login")
+                .usernameParameter("email")
+                .passwordParameter("password")
                 .and()
-                    .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/");
+                .logout()
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/");
 
     }
 }
