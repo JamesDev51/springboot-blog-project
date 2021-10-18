@@ -40,6 +40,18 @@ public class User {
     @CreationTimestamp
     private Timestamp joinedDate;
 
+    @Column(columnDefinition = "boolean default true")
+    private boolean accountNonExpired;
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean accountNonLocked;
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean credentialsNonExpired;
+
+    @Column(columnDefinition = "boolean default true")
+    private boolean enabled;
+
 
 
 

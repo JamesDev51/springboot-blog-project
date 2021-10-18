@@ -4,6 +4,7 @@ import com.jamesdev.blog.model.RoleType;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.Errors;
@@ -18,9 +19,12 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
     public User findUserByEmail(String email) {
+        //TODO: 나중에 코드 리팩토링하기(노란줄)
         User user = userRepository.findByEmail(email).orElseGet(() -> {
             return new User(); //찾아서 없으면 빈 유저 객체를 리턴
         });
@@ -28,6 +32,9 @@ public class UserService {
     }
     @Transactional
     public void signUp(User user){
+        String rawPassword= user.getPassword();
+        String encPassword =bCryptPasswordEncoder.encode(rawPassword);
+        user.setPassword(encPassword);
         user.setRole(RoleType.USER);
         userRepository.save(user);
     }
@@ -39,5 +46,6 @@ public class UserService {
         }
          return validateResult;
     }
+
 
 }

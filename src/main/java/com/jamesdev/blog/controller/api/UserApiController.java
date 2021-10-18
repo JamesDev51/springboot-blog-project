@@ -50,6 +50,10 @@ public class UserApiController {
                 .email(userDto.getEmail())
                 .password(userDto.getPassword())
                 .gender(userDto.getGender())
+                .accountNonLocked(true)
+                .credentialsNonExpired(true)
+                .enabled(true)
+                .accountNonExpired(true)
                 .build();
         userService.signUp(user);
         JSONObject emptyJson=new JSONObject();

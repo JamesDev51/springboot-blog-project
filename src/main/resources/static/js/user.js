@@ -183,8 +183,43 @@ function signUp(){
     }
 }
 
+function handleSignInBtnClick(){
+    if(signInEmail.value===""){
+        alert("이메일이 비었습니다.")
+        return false
+    }
+    if(signInPassword.value===""){
+        alert("비밀번호가 비었습니다.")
+        return false
+    }
+    // let token = document.querySelector("#csrfToken")
+    // let tokenName=token.name
+    // let tokenVal=token.value
+    let data={
+        "email":signInEmail.value,
+        "password":signInPassword.value
+    }
+    console.log(data);
+    $.ajax({
+        type:"POST",
+        url:"/auth/api/login",
+        data:data,
+        dataType:"json"
+    }).done(function (res){
+        if(res.status===200){
+            location.href=res.data.url;
+        }else{
+            alert(res.data.message);
+        }
+    }).fail(function (e){
+        console.log(e)
+    })
+}
+
 function signIn(){
-    return false;
+    if(signInBtn){
+        signInBtn.addEventListener("click",handleSignInBtnClick)
+    }
 }
 index.signUp
 index.signIn
