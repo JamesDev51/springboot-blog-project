@@ -2,7 +2,8 @@
 <html
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:th="http://www.thymeleaf.org">
-<header th:fragment="headerFragment" class="fixed-top">
+<header th:fragment="headerFragment" class="">
+    <h2 sec:authentication="principal"></h2>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white ">
         <div class="container-fluid">

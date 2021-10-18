@@ -47,7 +47,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                    .antMatchers("/","/auth/**","/js/**","/css/**","/img/**").permitAll()
+                    .antMatchers("", "/","/auth/**","/js/**","/css/**","/img/**").permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -56,7 +56,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .failureHandler(customAuthenticationFailureHandler)
                     .loginProcessingUrl("/auth/api/login")
                     .usernameParameter("email")
-                    .passwordParameter("password");
+                    .passwordParameter("password")
+                .and()
+                    .logout()
+                    .logoutUrl("/logout")
+                    .logoutSuccessUrl("/");
 
     }
 }
