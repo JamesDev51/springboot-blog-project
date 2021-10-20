@@ -13,6 +13,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+
+import javax.sql.DataSource;
 
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
@@ -31,6 +35,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
 
+    @Autowired
+    private DataSource dataSource;
+
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(principalDetailsService).passwordEncoder(bCryptPasswordEncoder());
@@ -45,22 +53,38 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
-                .authorizeRequests()
-                .antMatchers( "/","/auth/**","/js/**","/css/**","/img/**").permitAll()
-                .anyRequest().authenticated()
+                    .authorizeRequests()
+                    .antMatchers( "/","/auth/**","/js/**","/css/**","/img/**").permitAll()
+                    .anyRequest().authenticated()
                 .and()
-                .formLogin()
-                .loginPage("/auth/login")
-                .successHandler(customAuthenticationSuccessHandler)
-                .failureHandler(customAuthenticationFailureHandler)
-                .loginProcessingUrl("/auth/api/login")
-                .usernameParameter("email")
-                .passwordParameter("password")
+                    .formLogin()
+                    .loginPage("/auth/login")
+                    .successHandler(customAuthenticationSuccessHandler)
+                    .failureHandler(customAuthenticationFailureHandler)
+                    .loginProcessingUrl("/auth/api/login")
+                    .usernameParameter("email")
+                    .passwordParameter("password")
                 .and()
-                .logout()
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/");
+                    .logout()
+                    .logoutUrl("/auth/logout")
+                    .invalidateHttpSession(true) //세션 초기화
+                    .deleteCookies("JSESSIONID","remember-me") //쿠키 삭제
+                    .logoutSuccessUrl("/")
+                .and()
+                    .rememberMe()
+                    .key("remember-me")
+                    .rememberMeParameter("remember-me") //default : "remember-me"
+                    .userDetailsService(principalDetailsService)
+                    .tokenValiditySeconds(86400 * 7)
+                    .alwaysRemember(true)
+                .and()
+                    .sessionManagement();
 
+    }
+
+    private PersistentTokenRepository getJDBCRepository(){
+        JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+        repo.setDataSource(dataSource);
+        return repo;
     }
 }

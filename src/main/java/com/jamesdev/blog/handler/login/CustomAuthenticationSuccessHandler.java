@@ -25,6 +25,7 @@ public class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         dataMap.put("url","/"); //나중에는 원래 있던 곳으로 돌아갈 수 잇게 세션에서  기존 url 받아옴
         ObjectMapper mapper= new ObjectMapper(); //JSON에 담을 매퍼
 
+        request.getSession().setMaxInactiveInterval(20);
         ResponseDto<Map<String,String>> responseDto = new ResponseDto<>(HttpStatus.OK.value(), dataMap);
         response.setCharacterEncoding("UTF-8");
         response.setStatus(HttpServletResponse.SC_OK);

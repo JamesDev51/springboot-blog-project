@@ -47,25 +47,6 @@
         </nav>
         <!-- Navbar -->
 
-        <!-- Background image -->
-        <div
-                class="p-5 text-center bg-image"
-                style="
-          background-image: url('https://mdbootstrap.com/img/new/slides/041.jpg');
-          height: 400px;
-        "
-        >
-            <div class="mask" style="background-color: rgba(0, 0, 0, 0.6);">
-                <div class="d-flex justify-content-center align-items-center h-100">
-                    <div class="text-white">
-                        <h2 class="mb-3">Hi. I am James, Junior Backend Developer.</h2>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- Background image -->
-
     </td>
 
     <td sec:authorize="isAuthenticated()">
@@ -94,7 +75,14 @@
                             <a class="nav-link" href="#">User Info</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="/logout">Logout</a>
+                                <span class="nav-link " style="cursor:pointer;" id="logoutBtn">Logout</span>
+                                <input
+                                        type="hidden"
+                                        th:name="${_csrf.headerName}"
+                                        th:value="${_csrf.token}"
+                                        id="csrfToken"/>
+
+
                         </li>
                     </ul>
                 </div>
@@ -113,7 +101,7 @@
             </div>
         </nav>
         <!-- Navbar -->
-
+    </td>
         <!-- Background image -->
         <div
                 class="p-5 text-center bg-image"
@@ -132,9 +120,6 @@
             </div>
         </div>
         <!-- Background image -->
-
-    </td>
-    <!-- Navbar -->
 
 </header>
 

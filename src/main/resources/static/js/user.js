@@ -10,6 +10,8 @@ const signUpEmailChecked=document.querySelector("#emailChecked");
 const signInBtn=document.querySelector(".loginBtn");
 const signInEmail=document.querySelector(".email");
 const signInPassword=document.querySelector(".password");
+const signInRememberMe=document.querySelector("#rememberMe")
+const logoutBtn = document.querySelector("#logoutBtn");
 
 let regPassword= /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
 let regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
@@ -17,9 +19,10 @@ let regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*
 
 let index={
     signUp:signUp(),
-    signIn:signIn()
+    signIn:signIn(),
+    logout:logout()
 }
-
+//정규표현식 체크
 function regexCheck(reg, what, message) {
     if(reg.test(what.value)) {
         return true;
@@ -102,6 +105,7 @@ function handleSignUpBtnClick(){
         alert("이메일 중복확인을 해주세요.");
         return false;
     }
+
     let data={
         name:signUpName.value,
         email:signUpEmail.value,
@@ -115,7 +119,6 @@ function handleSignUpBtnClick(){
       contentType: "application/json;charset=utf-8",
       dataType: "json"
     }).done(function(res){
-        console.log(res);
         if(res.status===500){
             alert("회원가입에 실패하였습니다.")
         }else{
@@ -141,6 +144,7 @@ function handleDupCheckBtnClick(){
     let data={
       email:signUpEmail.value
     };
+
     $.ajax({
         type:"POST",
         url:"/auth/api/checkEmailUsed",
@@ -182,7 +186,7 @@ function signUp(){
         signUpBtn.addEventListener("click",handleSignUpBtnClick)
     }
 }
-
+//로그인 버튼 눌렀을 때
 function handleSignInBtnClick(){
     if(signInEmail.value===""){
         alert("이메일이 비었습니다.")
@@ -192,19 +196,22 @@ function handleSignInBtnClick(){
         alert("비밀번호가 비었습니다.")
         return false
     }
-    // let token = document.querySelector("#csrfToken")
-    // let tokenName=token.name
-    // let tokenVal=token.value
+    let token = document.querySelector("#csrfToken")
+    let tokenName=token.name
+    let tokenVal=token.value
     let data={
         "email":signInEmail.value,
-        "password":signInPassword.value
+        "password":signInPassword.value,
+        "remember-me":signInRememberMe.checked
     }
-    console.log(data);
     $.ajax({
         type:"POST",
         url:"/auth/api/login",
         data:data,
-        dataType:"json"
+        dataType:"json",
+        beforeSend:function(xhr){
+            xhr.setRequestHeader(tokenName,tokenVal)
+        }
     }).done(function (res){
         if(res.status===200){
             location.href=res.data.url;
@@ -221,6 +228,29 @@ function signIn(){
         signInBtn.addEventListener("click",handleSignInBtnClick)
     }
 }
+//로그아웃 버튼눌렀을 때
+function handleLogoutBtnClick(){
+    let token = document.querySelector("#csrfToken")
+    let tokenName=token.name
+    let tokenVal=token.value
+    $.ajax({
+        type:"POST",
+        url:"/auth/logout",
+        beforeSend:function(xhr){
+            xhr.setRequestHeader(tokenName,tokenVal)
+        }
+    }).done(function (res){
+        location.href="/"
+    }).fail(function (e){
+        console.log(e)
+    })
+}
+
+function logout(){
+    if(logoutBtn){
+        logoutBtn.addEventListener("click",handleLogoutBtnClick)
+    }
+}
 index.signUp
 index.signIn
-
+index.logout

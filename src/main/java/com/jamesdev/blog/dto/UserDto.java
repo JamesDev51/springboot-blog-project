@@ -27,4 +27,6 @@ public class UserDto {
     @NotBlank(message="성별은 필수 입력 값입니다.")
     private Gender gender;
 
+    private boolean rememberMe;
+
 }

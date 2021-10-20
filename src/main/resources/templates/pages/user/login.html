@@ -18,11 +18,11 @@
                                     <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign in</p>
 
                                     <form class="mx-1 mx-md-4">
-<!--                                        <input-->
-<!--                                                type="hidden"-->
-<!--                                                th:name="${_csrf.parameterName}"-->
-<!--                                                th:value="${_csrf.token}"-->
-<!--                                                id="csrfToken"/>-->
+                                        <input
+                                                type="hidden"
+                                                th:name="${_csrf.headerName}"
+                                                th:value="${_csrf.token}"
+                                                id="csrfToken"/>
 
                                         <div class="d-flex flex-row align-items-center mb-4">
                                             <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
@@ -39,10 +39,16 @@
                                                 <label class="form-label" for="form3Example4c">Password</label>
                                             </div>
                                         </div>
+                                        <input class="form-check-input" type="checkbox" id="rememberMe" name="remember-me">
+                                        <label class="form-check-label" for="rememberMe" >
+                                            remember me
+                                        </label>
+
 
                                         <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
                                             <button type="button" class="btn btn-primary btn-lg loginBtn">Login</button>
                                         </div>
+
 
                                     </form>
 
