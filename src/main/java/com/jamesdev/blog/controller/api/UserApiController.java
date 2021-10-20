@@ -1,7 +1,8 @@
 package com.jamesdev.blog.controller.api;
 
+import com.jamesdev.blog.dto.EditUserDto;
 import com.jamesdev.blog.dto.ResponseDto;
-import com.jamesdev.blog.dto.UserDto;
+import com.jamesdev.blog.dto.SignUpUserDto;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.service.UserService;
 import com.jamesdev.blog.vo.EmailVo;
@@ -11,10 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
@@ -35,28 +38,36 @@ public class UserApiController {
         }
     }
     @PostMapping("/auth/api/signUp")
-    private ResponseDto<JSONObject>signUp(@Valid @RequestBody UserDto userDto, Errors errors, Model model){
-        model.addAttribute("userDto",userDto); //유효성 검사에 실패했을 때 입력 데이터 유지
-
+    private ResponseDto<JSONObject>signUp(@Valid @RequestBody SignUpUserDto signUpUserDto, Errors errors){
+        //유효성 검사 통과못함
         if(errors.hasErrors()){
             Map<String,String> validatorResult = userService.validateHandling(errors);
             JSONObject validatorResultJson=new JSONObject(validatorResult);
-            return new ResponseDto<>(HttpStatus.INTERNAL_SERVER_ERROR.value(), validatorResultJson);
+            return new ResponseDto<>(HttpStatus.SERVICE_UNAVAILABLE.value(), validatorResultJson);
         }
         //유효성 검사 통과
-        User user = User
-                .builder()
-                .name(userDto.getName())
-                .email(userDto.getEmail())
-                .password(userDto.getPassword())
-                .gender(userDto.getGender())
-                .accountNonLocked(true)
-                .credentialsNonExpired(true)
-                .enabled(true)
-                .accountNonExpired(true)
-                .build();
-        userService.signUp(user);
-        JSONObject emptyJson=new JSONObject();
-        return new ResponseDto<>(HttpStatus.OK.value(), emptyJson);
+        userService.signUp(signUpUserDto);
+        return new ResponseDto<>(HttpStatus.OK.value(), new JSONObject());
     }
+
+    @PutMapping("/auth/api/editUser")
+    private ResponseDto<JSONObject> editUser(@Valid @RequestBody EditUserDto editUserDto,Errors errors, Model model){
+
+        if(errors.hasErrors()){
+           Map<String,String> validatorResult = userService.validateHandling(errors);
+           JSONObject validatorResultJson = new JSONObject(validatorResult);
+           return new ResponseDto<>(HttpStatus.SERVICE_UNAVAILABLE.value(), validatorResultJson);
+        }
+        Map<String,String> resultMap=new HashMap<>();
+        if(!userService.editUser(editUserDto)){
+            resultMap.put("message","기존 비밀번호가 일치하지 않습니다.");
+        }
+        JSONObject resultJson= new JSONObject(resultMap);
+
+
+        return new ResponseDto<>(HttpStatus.OK.value(),resultJson);
+    }
+
+
 }
+

@@ -12,15 +12,26 @@ const signInEmail=document.querySelector(".email");
 const signInPassword=document.querySelector(".password");
 const signInRememberMe=document.querySelector("#rememberMe")
 const logoutBtn = document.querySelector("#logoutBtn");
-
+const editUserName = document.querySelector("#name");
+const editUserPhoneNumber = document.querySelector("#phoneNumber");
+const editUserEmail = document.querySelector("#email");
+const editUserEmailChecked = document.querySelector("#emailChecked");
+const editUserDupCheckBtn = document.querySelector("#editUserDuplicationCheckBtn");
+const editUserOriPassword = document.querySelector("#originalPassword");
+const editUserNewPassword = document.querySelector("#newPassword");
+const editUserBtn = document.querySelector(".editUserBtn");
+const editUserOriEmail=document.querySelector(".originalEmail");
 let regPassword= /^[a-zA-Z0-9]{4,12}$/ // 아이디와 패스워드가 적합한지 검사할 정규식
 let regEmail = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i; // 이메일이 적합한지 검사할 정규식
+let regPhone = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
+
 
 
 let index={
     signUp:signUp(),
     signIn:signIn(),
-    logout:logout()
+    logout:logout(),
+    editUser:editUser()
 }
 //정규표현식 체크
 function regexCheck(reg, what, message) {
@@ -251,6 +262,87 @@ function logout(){
         logoutBtn.addEventListener("click",handleLogoutBtnClick)
     }
 }
+
+
+
+function handleEditUserBtnClick(){
+    if(editUserPhoneNumber.value!=="" && !regexCheck(regPhone,editUserPhoneNumber,"정확한 휴대폰 번호를 입력해주세요.")){
+        //패스워드1 유효성 검사
+        return false;
+    }
+
+    if(editUserOriPassword.value===""){
+        //비밀번호1 비어있는지 검사
+        alert("기존 비밀번호를 입력해주세요.");
+        editUserOriPassword.focus()
+        return false;
+    }
+
+    if(editUserNewPassword.value===""){
+        //비밀번호2 비어있는지 검사
+        alert("새 비밀번호를 입력해주세요.");
+        editUserNewPassword.focus()
+        return false;
+    }
+
+    if (editUserOriPassword.value===editUserNewPassword.value){
+        //패스워드 1,2 동일성 검사
+        alert("비밀번호가 같습니다. 새로운 비밀번호로 변경해주세요..");
+        editUserNewPassword.value="";
+        editUserNewPassword.focus();
+        return false;
+    }
+    if(!regexCheck(regPassword,editUserNewPassword,"비밀번호는 4~12자의 영문 대소문자와 숫자로만 입력 가능합니다.")){
+        //패스워드1 유효성 검사
+        return false;
+    }
+    let token = document.querySelector("#csrfToken")
+    let tokenName=token.name
+    let tokenVal=token.value
+
+    let data={
+        "name":editUserName.value,
+        "email":editUserEmail.value,
+        "phoneNumber":editUserPhoneNumber.value,
+        "originalPassword":editUserOriPassword.value,
+        "newPassword":editUserNewPassword.value,
+    }
+
+    $.ajax({
+        type:"PUT",
+        url:"/auth/api/editUser",
+        data:JSON.stringify(data),
+        contentType:"application/json;charset=utf-8",
+        dataType:"json",
+        beforeSend:function(xhr){
+            xhr.setRequestHeader(tokenName,tokenVal)
+        }
+    }).done(function (res){
+        console.log(res)
+        if(res.data.message){
+            alert(res.data.message);
+            editUserOriPassword.value=""
+        }else{
+            location.reload();
+        }
+    }).fail(function (e){
+        console.log(e)
+    })
+
+
+}
+
+
+
+function editUser(){
+
+    if(editUserBtn){
+        editUserBtn.addEventListener("click",handleEditUserBtnClick)
+    }
+}
+
+
 index.signUp
 index.signIn
 index.logout
+index.editUser

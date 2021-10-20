@@ -20,9 +20,11 @@ public class PrincipalDetails implements UserDetails {
 
     public User getUser(){return this.user;}
 
-    public String getName(){
-        return user.getName();
-    }
+    public String getName(){return user.getName();}
+    public Long getId(){return user.getId();}
+    public String getPhoneNumber(){return user.getPhoneNumber();}
+
+    public String getEmail(){return user.getEmail();}
 
     @Override
     public String getPassword() {
