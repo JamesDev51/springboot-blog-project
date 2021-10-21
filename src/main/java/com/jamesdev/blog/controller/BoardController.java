@@ -33,6 +33,12 @@ public class BoardController {
         return "board/post";
     }
 
+    @GetMapping("/post/{id}/editPost")
+    public String editPost(Model model,@PathVariable long id){
+        model.addAttribute("post",boardService.findPostById(id));
+        return "board/editPost";
+    }
+
     @GetMapping("/user/writePost")
     public String writeBoard(){return "board/writePost";}
 

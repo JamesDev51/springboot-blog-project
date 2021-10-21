@@ -30,4 +30,12 @@ public class BoardService {
             return new IllegalArgumentException("찾는 보드는 없소");
         });
     }
+    @Transactional
+    public void editPost(long id, Board requestedBoard){
+        Board board = boardRepository.findById(id).orElseThrow(()->{
+            return new IllegalArgumentException("찾는 보드가 업수다");
+        });
+        board.setTitle(requestedBoard.getTitle());
+        board.setContent(requestedBoard.getContent());
+    }
 }
