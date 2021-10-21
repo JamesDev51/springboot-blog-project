@@ -38,4 +38,8 @@ public class BoardService {
         board.setTitle(requestedBoard.getTitle());
         board.setContent(requestedBoard.getContent());
     }
+    @Transactional
+    public void deletePost(long id){
+        boardRepository.deleteById(id);
+    }
 }

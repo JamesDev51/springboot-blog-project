@@ -16,6 +16,7 @@
         <td th:if="${post.user.id}==${#authentication.principal.user.id}">
             <a id="btn-update" class="btn btn-warning" th:href="@{/post/{id}/editPost(id=${post.id})}">edit</a>
             <button id="btn-delete" class="btn btn-danger">delete</button>
+            <input type="hidden" id="id" th:value="${post.id}">
         </td>
         <br>
         <br>

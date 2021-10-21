@@ -25,5 +25,10 @@ public class BoardApiController {
         boardService.editPost(id,board);
         return new ResponseDto<>(HttpStatus.OK.value(), 1);
     }
+    @DeleteMapping("/board/api/deletePost/{id}")
+    public ResponseDto<Integer> deletePost(@PathVariable long id){
+        boardService.deletePost(id);
+        return new ResponseDto<>(HttpStatus.OK.value(), 1);
+    }
 
 }
