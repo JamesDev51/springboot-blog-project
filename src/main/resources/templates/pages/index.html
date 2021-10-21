@@ -4,7 +4,31 @@
         xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
         layout:decorate="~{../layouts/home}"
 >
-<div layout:fragment="content">
-    <h1>this is content</h1>
+<div layout:fragment="content" class="mt-5 mb-5">
+    <td th:each="post : ${posts.content}">
+        <a th:href="@{/post/{id}(id=${post.id})}" class="mt-5 mb-5">
+            <div class="container">
+                <div class="card m-2">
+                    <div class="card-body">
+                        <h4 class="card-title text-decoration-none" th:text="${post.title}">제목 적는 부분</h4>
+                    </div>
+                </div>
+            </div>
+        </a>
+    </td>
+    <ul class="pagination justify-content-center">
+        <td th:if="${posts.first}">
+            <li class="page-item disabled"><a class="page-link" th:href="@{/(page=${posts.number}-1)}">Previous</a></li>
+        </td>
+        <td th:unless="${posts.first}">
+            <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.number}-1)}">Previous</a></li>
+        </td>
+        <td th:if="${posts.last}">
+            <li class="page-item disabled"><a class="page-link" th:href="@{/(page=${posts.number}+1)}">Next</a></li>
+        </td>
+        <td th:unless="${posts.last}">
+            <li class="page-item"><a class="page-link" th:href="@{/(page=${posts.number}+1)}">Next</a></li>
+        </td>
+    </ul>
 </div>
 </html>

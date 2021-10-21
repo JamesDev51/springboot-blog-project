@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{../layouts/default}"
+>
+<!-- index.html 고유 CSS 추가 -->
+<!--<th:block layout:fragment="css"> </th:block>-->
+
+<!-- index.html 고유 스크립트 추가 -->
+<!--<th:block layout:fragment="script"> </th:block>-->
+
+<div layout:fragment="content" class="mt-5 mb-5">
+    <div class="container">
+        <button class="btn btn-secondary" onclick="history.back()">back</button>
+        <td th:if="${post.user.id}==${#authentication.principal.user.id}">
+            <a id="btn-update" class="btn btn-warning" th:href="@{/post/{id}/editPost(id=${post.id})}">edit</a>
+            <button id="btn-delete" class="btn btn-danger">delete</button>
+        </td>
+        <br>
+        <br>
+        <div>
+            post # : <span  th:text="${post.id}" th:id="id" th:value="${post.id}"></span>
+            author : <span th:text="${post.user.name}"></span>
+
+        </div>
+        <br>
+        <br>
+        <div class="container">
+            <h3 th:text="${post.title}" id="title"></h3>
+        </div>
+        <hr>
+        <div class="container">
+            <div th:utext="${post.content}"></div>
+        </div>
+        <hr>
+
+
+        <div class="card">
+            <br>
+                <form id="algin-form">
+                    <div class="form-group">
+                        <input type="hidden" id="boardId" th:value="${post.id}">
+                        <input type="hidden" id="userId" th:value="${#authentication.principal.user.id}">
+                        <h4>Leave a comment</h4> <label for="message">Message</label>
+                        <textarea name="msg" id="comment-content" msg cols="30" rows="5" class="form-control" ></textarea>
+                    </div>
+                    <div class=" form-group "> <button type="button" class="btn" id="btn-comment-save">Post Comment</button> </div>
+                </form>
+        </div>
+    </div>
+
+<!--    <div class="card">-->
+<!--        <div class="card-header">댓글 리스트</div>-->
+<!--        <ul class="list-group" id="comment&#45;&#45;box">-->
+<!--            <tr th:each="comment : ${board.comments}">-->
+<!--                <li id="comment&#45;&#45;1" class="list-group-item d-flex justify-content-between">-->
+<!--                    <div th:text="${comment.content}">댓글 내용입니다.</div>-->
+<!--                    <div class="d-flex ">-->
+<!--                        <div class="font-italic">작성자 : <span th:text="${comment.user.username}"></span> &nbsp;</div>-->
+<!--                        <button th:onclick="|commentDelete(${board.id},${comment.id})|" class="badge">삭제</button>-->
+<!--                    </div>-->
+<!--                </li>-->
+<!--            </tr>-->
+<!--        </ul>-->
+<!--    </div>-->
+
+
+
+</div>
+
+
+</html>
