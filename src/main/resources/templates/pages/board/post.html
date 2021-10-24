@@ -51,20 +51,22 @@
         </div>
     </div>
 
-<!--    <div class="card">-->
-<!--        <div class="card-header">댓글 리스트</div>-->
-<!--        <ul class="list-group" id="comment&#45;&#45;box">-->
-<!--            <tr th:each="comment : ${board.comments}">-->
-<!--                <li id="comment&#45;&#45;1" class="list-group-item d-flex justify-content-between">-->
-<!--                    <div th:text="${comment.content}">댓글 내용입니다.</div>-->
-<!--                    <div class="d-flex ">-->
-<!--                        <div class="font-italic">작성자 : <span th:text="${comment.user.username}"></span> &nbsp;</div>-->
-<!--                        <button th:onclick="|commentDelete(${board.id},${comment.id})|" class="badge">삭제</button>-->
-<!--                    </div>-->
-<!--                </li>-->
-<!--            </tr>-->
-<!--        </ul>-->
-<!--    </div>-->
+    <div class="card">
+        <div class="card-header">Comment List</div>
+        <ul class="list-group" id="comment--box">
+            <tr th:each="comment : ${post.comments}">
+                <li id="comment--1" class="list-group-item d-flex justify-content-between">
+                    <div th:text="${comment.content}">댓글 내용입니다.</div>
+                    <div class="d-flex ">
+                        <div class="font-italic">comment author : <span th:text="${comment.user.name}"></span> &nbsp;</div>
+                        <td th:if="${comment.user.email}==${#authentication.principal.user.email}">
+                        <button th:onclick="|commentDelete(${post.id},${comment.id})|" class="badge">삭제</button>
+                        </td>
+                    </div>
+                </li>
+            </tr>
+        </ul>
+    </div>
 
 
 

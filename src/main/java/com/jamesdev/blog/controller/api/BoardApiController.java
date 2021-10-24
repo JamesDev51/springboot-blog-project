@@ -1,6 +1,7 @@
 package com.jamesdev.blog.controller.api;
 
 import com.jamesdev.blog.config.auth.PrincipalDetails;
+import com.jamesdev.blog.dto.CommentWriteDto;
 import com.jamesdev.blog.dto.ResponseDto;
 import com.jamesdev.blog.model.Board;
 import com.jamesdev.blog.service.BoardService;
@@ -29,6 +30,18 @@ public class BoardApiController {
     public ResponseDto<Integer> deletePost(@PathVariable long id){
         boardService.deletePost(id);
         return new ResponseDto<>(HttpStatus.OK.value(), 1);
+    }
+
+    @PostMapping("/board/api/writeComment/{id}")
+    public ResponseDto<Integer> writeComment(@PathVariable long id, @RequestBody CommentWriteDto commentWriteDto){
+        boardService.writeComment(commentWriteDto);
+        return new ResponseDto<>(HttpStatus.OK.value(), 1);
+    }
+
+    @DeleteMapping("/board/api/deleteComment/{id}")
+    public ResponseDto<Integer> deleteComment(@PathVariable long id){
+        boardService.deleteComment(id);
+        return new ResponseDto<>(HttpStatus.OK.value() ,1);
     }
 
 }

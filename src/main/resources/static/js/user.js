@@ -123,12 +123,18 @@ function handleSignUpBtnClick(){
         password:signUpPassword1.value,
         gender:gender
     }
+    let token = document.querySelector("#csrfToken")
+    let tokenName=token.name
+    let tokenVal=token.value
     $.ajax({
       type:"POST",
       url:"/auth/api/signUp",
       data:JSON.stringify(data),
       contentType: "application/json;charset=utf-8",
-      dataType: "json"
+      dataType: "json",
+        beforeSend:function(xhr){
+            xhr.setRequestHeader(tokenName,tokenVal)
+        }
     }).done(function(res){
         if(res.status===500){
             alert("회원가입에 실패하였습니다.")
@@ -155,13 +161,19 @@ function handleDupCheckBtnClick(){
     let data={
       email:signUpEmail.value
     };
+    let token = document.querySelector("#csrfToken")
+    let tokenName=token.name
+    let tokenVal=token.value
 
     $.ajax({
         type:"POST",
         url:"/auth/api/checkEmailUsed",
         data:JSON.stringify(data),
         contentType:"application/json;charset=utf-8",
-        dataType:"json"
+        dataType:"json",
+        beforeSend:function(xhr){
+            xhr.setRequestHeader(tokenName,tokenVal)
+        }
     }).done(function (res){
         let resData=res.data;
         if(resData===1){
@@ -183,6 +195,8 @@ function handleDupCheckBtnClick(){
                 signUpEmail.focus()
             }
         }
+    }).fail(function (e){
+        console.log(e);
     })
 
 }
@@ -331,8 +345,6 @@ function handleEditUserBtnClick(){
 
 
 }
-
-
 
 function editUser(){
 
