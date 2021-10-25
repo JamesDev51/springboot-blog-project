@@ -15,3 +15,10 @@
 4. Edit Profile
 5. Remember-me
 6. Search for title or content
+
+## UI
+### HOME
+
+![홈화면](https://user-images.githubusercontent.com/66056101/138718758-cd493eac-171f-4af1-ba8a-6c2660c2cf3b.png)
+
+
