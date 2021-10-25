@@ -14,3 +14,4 @@
 3. CRUD Comment
 4. Edit Profile
 5. Remember-me
+6. Search for title or content
