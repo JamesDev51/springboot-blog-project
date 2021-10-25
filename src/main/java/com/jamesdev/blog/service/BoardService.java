@@ -20,7 +20,13 @@ public class BoardService {
     private final  CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
-    public Page<Board> getPosts(Pageable pageable){return boardRepository.findAll(pageable);}
+    public Page<Board> getPosts(Pageable pageable){
+        return boardRepository.findAll(pageable);}
+
+    @Transactional(readOnly = true)
+    public Page<Board> searchPosts(Pageable pageable,String keyword){
+        return boardRepository.findByTitleContainingOrContentContaining(pageable,keyword,keyword);
+    }
 
     @Transactional
     public void writePost(PostRequestDto postRequestDto, User user){

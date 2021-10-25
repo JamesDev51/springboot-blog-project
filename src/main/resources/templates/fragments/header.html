@@ -3,7 +3,6 @@
         xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
         xmlns:th="http://www.thymeleaf.org">
 <header th:fragment="headerFragment" class="">
-    <h2 sec:authentication="principal"></h2>
     <td sec:authorize="isAnonymous()">
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white ">
@@ -84,13 +83,14 @@
                         </li>
                     </ul>
                 </div>
-                <form class="d-flex input-group w-auto">
+                <form class="d-flex input-group w-auto" action="/search" method="get">
                     <input
                             type="search"
                             class="form-control rounded"
                             placeholder="Search"
                             aria-label="Search"
                             aria-describedby="search-addon"
+                            name="keyword"
                     />
                     <span class="input-group-text border-0" id="search-addon">
         <i class="fas fa-search"></i>

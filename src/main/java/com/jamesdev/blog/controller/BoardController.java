@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -25,6 +26,12 @@ public class BoardController {
         return "index";
     }
 
+    @GetMapping("/search")
+    public String search(@RequestParam(required = false)String keyword, Model model, @PageableDefault(size=3,sort="id",direction=Sort.Direction.DESC)Pageable pageable) {
+        Page<Board> searchedPosts = boardService.searchPosts(pageable,keyword);
+        model.addAttribute("posts",searchedPosts);
+        return "index";
+    }
 
     @GetMapping("/post/{id}")
     public String getPost(Model model,@PathVariable long id){
