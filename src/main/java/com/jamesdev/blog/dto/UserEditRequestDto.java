@@ -10,7 +10,7 @@ import javax.validation.constraints.Pattern;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class EditUserDto {
+public class UserEditRequestDto {
     private String name;
     private String email;
 

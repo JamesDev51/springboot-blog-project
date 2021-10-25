@@ -1,6 +1,7 @@
 package com.jamesdev.blog.service;
 
-import com.jamesdev.blog.dto.CommentWriteDto;
+import com.jamesdev.blog.dto.CommentWriteRequestDto;
+import com.jamesdev.blog.dto.PostRequestDto;
 import com.jamesdev.blog.model.Board;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.repository.BoardRepository;
@@ -24,10 +25,11 @@ public class BoardService {
     public Page<Board> getPosts(Pageable pageable){return boardRepository.findAll(pageable);}
 
     @Transactional
-    public void writePost(Board board, User user){
-        board.setCount(0);
-        board.setUser(user);
-        boardRepository.save(board);
+    public void writePost(PostRequestDto postRequestDto, User user){
+        Board requestedBoard = postRequestDto.toEntity();
+        requestedBoard.setCount(0);
+        requestedBoard.setUser(user);
+        boardRepository.save(requestedBoard);
     }
     @Transactional
     public Board findPostById(long id){
@@ -36,12 +38,12 @@ public class BoardService {
         });
     }
     @Transactional
-    public void editPost(long id, Board requestedBoard){
+    public void editPost(long id, PostRequestDto postRequestDto){
         Board board = boardRepository.findById(id).orElseThrow(()->{
             return new IllegalArgumentException("찾는 보드가 업수다");
         });
-        board.setTitle(requestedBoard.getTitle());
-        board.setContent(requestedBoard.getContent());
+        board.setTitle(postRequestDto.getTitle());
+        board.setContent(postRequestDto.getContent());
     }
     @Transactional
     public void deletePost(long id){
@@ -49,8 +51,8 @@ public class BoardService {
     }
 
     @Transactional
-    public void writeComment(CommentWriteDto commentWriteDto){
-        int ret=commentRepository.commentSave(commentWriteDto.getUserId(),commentWriteDto.getBoardId(),commentWriteDto.getContent());
+    public void writeComment(CommentWriteRequestDto commentWriteRequestDto){
+        int ret=commentRepository.commentSave(commentWriteRequestDto.getUserId(), commentWriteRequestDto.getBoardId(), commentWriteRequestDto.getContent());
     }
     public void deleteComment(long id){
         commentRepository.deleteById(id);

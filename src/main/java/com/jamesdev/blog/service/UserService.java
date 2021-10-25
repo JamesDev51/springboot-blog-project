@@ -1,7 +1,7 @@
 package com.jamesdev.blog.service;
 
-import com.jamesdev.blog.dto.EditUserDto;
-import com.jamesdev.blog.dto.SignUpUserDto;
+import com.jamesdev.blog.dto.UserEditRequestDto;
+import com.jamesdev.blog.dto.UserSignUpRequestDto;
 import com.jamesdev.blog.model.RoleType;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.repository.UserRepository;
@@ -35,15 +35,15 @@ public class UserService {
         return user;
     }
     @Transactional
-    public void signUp(SignUpUserDto signUpUserDto){
-        String rawPassword= signUpUserDto.getPassword();
+    public void signUp(UserSignUpRequestDto userSignUpRequestDto){
+        String rawPassword= userSignUpRequestDto.getPassword();
         String encPassword =bCryptPasswordEncoder.encode(rawPassword);
         User newUser = User
                 .builder()
-                .name(signUpUserDto.getName())
-                .email(signUpUserDto.getEmail())
+                .name(userSignUpRequestDto.getName())
+                .email(userSignUpRequestDto.getEmail())
                 .password(encPassword)
-                .gender(signUpUserDto.getGender())
+                .gender(userSignUpRequestDto.getGender())
                 .accountNonLocked(true)
                 .credentialsNonExpired(true)
                 .enabled(true)
@@ -62,20 +62,20 @@ public class UserService {
     }
 
     @Transactional
-    public boolean editUser(EditUserDto editUserDto){
-        if(!verifyUser(editUserDto.getEmail(),editUserDto.getOriginalPassword())){
+    public boolean editUser(UserEditRequestDto userEditRequestDto){
+        if(!verifyUser(userEditRequestDto.getEmail(), userEditRequestDto.getOriginalPassword())){
             System.out.println("일치 안함");
             return false;
         }
         User persistence = userRepository
-                .findByEmail(editUserDto.getEmail())
+                .findByEmail(userEditRequestDto.getEmail())
                 .orElseThrow(()->{
                     return new UsernameNotFoundException("없는 유저입니다.");
                 });
-        String rawPassword=editUserDto.getNewPassword();
+        String rawPassword= userEditRequestDto.getNewPassword();
         String encPassword= bCryptPasswordEncoder.encode(rawPassword);
         persistence.setPassword(encPassword);
-        persistence.setPhoneNumber(editUserDto.getPhoneNumber());
+        persistence.setPhoneNumber(userEditRequestDto.getPhoneNumber());
         System.out.println("edit user 종료");
         return true;
 

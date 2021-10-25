@@ -1,11 +1,11 @@
 package com.jamesdev.blog.controller.api;
 
-import com.jamesdev.blog.dto.EditUserDto;
+import com.jamesdev.blog.dto.UserEditRequestDto;
 import com.jamesdev.blog.dto.ResponseDto;
-import com.jamesdev.blog.dto.SignUpUserDto;
+import com.jamesdev.blog.dto.UserSignUpRequestDto;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.service.UserService;
-import com.jamesdev.blog.vo.EmailVo;
+import com.jamesdev.blog.dto.EmailDupCheckDto;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,8 +27,8 @@ public class UserApiController {
     private UserService userService;
 
     @PostMapping("/auth/api/checkEmailUsed")
-    private ResponseDto<Integer> checkEmailUsed(@RequestBody EmailVo emailVo){
-        User user = userService.findUserByEmail(emailVo.getEmail());
+    private ResponseDto<Integer> checkEmailUsed(@RequestBody EmailDupCheckDto emailDupCheckDto){
+        User user = userService.findUserByEmail(emailDupCheckDto.getEmail());
         if (user.equals(new User())){
             //빈 객체면 회원가입 계속 진행
             return new ResponseDto<>(HttpStatus.OK.value(), 1);
@@ -38,7 +38,7 @@ public class UserApiController {
         }
     }
     @PostMapping("/auth/api/signUp")
-    private ResponseDto<JSONObject>signUp(@Valid @RequestBody SignUpUserDto signUpUserDto, Errors errors){
+    private ResponseDto<JSONObject>signUp(@Valid @RequestBody UserSignUpRequestDto userSignUpRequestDto, Errors errors){
         //유효성 검사 통과못함
         if(errors.hasErrors()){
             Map<String,String> validatorResult = userService.validateHandling(errors);
@@ -46,12 +46,12 @@ public class UserApiController {
             return new ResponseDto<>(HttpStatus.SERVICE_UNAVAILABLE.value(), validatorResultJson);
         }
         //유효성 검사 통과
-        userService.signUp(signUpUserDto);
+        userService.signUp(userSignUpRequestDto);
         return new ResponseDto<>(HttpStatus.OK.value(), new JSONObject());
     }
 
     @PutMapping("/auth/api/editUser")
-    private ResponseDto<JSONObject> editUser(@Valid @RequestBody EditUserDto editUserDto,Errors errors, Model model){
+    private ResponseDto<JSONObject> editUser(@Valid @RequestBody UserEditRequestDto userEditRequestDto, Errors errors, Model model){
 
         if(errors.hasErrors()){
            Map<String,String> validatorResult = userService.validateHandling(errors);
@@ -59,7 +59,7 @@ public class UserApiController {
            return new ResponseDto<>(HttpStatus.SERVICE_UNAVAILABLE.value(), validatorResultJson);
         }
         Map<String,String> resultMap=new HashMap<>();
-        if(!userService.editUser(editUserDto)){
+        if(!userService.editUser(userEditRequestDto)){
             resultMap.put("message","기존 비밀번호가 일치하지 않습니다.");
         }
         JSONObject resultJson= new JSONObject(resultMap);
