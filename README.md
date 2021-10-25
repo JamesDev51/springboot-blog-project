@@ -13,3 +13,4 @@
 2. CRUD Post
 3. CRUD Comment
 4. Edit Profile
+5. Remember-me
