@@ -26,7 +26,6 @@ auth에 따라서 헤더 변경
 제목 & 내용 키워드로 검색 가능
 ![검색기능](https://user-images.githubusercontent.com/66056101/138719520-7d83701e-ffd7-4d70-957b-47e993f70e6c.png)
 
-
 ### SignUp
 프론트 & 백 유효성 검사
 이메일 중복확인
@@ -34,13 +33,13 @@ auth에 따라서 헤더 변경
 
 이메일이 중복되는 경우
 ![이메일사용중](https://user-images.githubusercontent.com/66056101/138719224-18fb1ac1-c73d-4b8e-a19d-477752219b67.png)
+
 이메일 사용이 가능한 경우
 ![이메일사용가능](https://user-images.githubusercontent.com/66056101/138719239-ba8e5769-78a0-4aba-bc50-6860c5a75ccb.png)
 
-
 ### SignIn
 프론트 유효성 검사
-리멤버미 기능(세선 유지 2주)
+리멤버미 기능(세 유지 2주)
 ![로그인 리멤버미](https://user-images.githubusercontent.com/66056101/138719075-ac137ddd-56e0-4be9-b50a-f71e2ad4869d.png)
 
 ### Edit User Profile
