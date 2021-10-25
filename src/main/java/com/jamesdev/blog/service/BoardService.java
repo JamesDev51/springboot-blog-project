@@ -6,20 +6,18 @@ import com.jamesdev.blog.model.Board;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.repository.BoardRepository;
 import com.jamesdev.blog.repository.CommentRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
-    @Autowired
-    private BoardRepository boardRepository;
-
-    @Autowired
-    private CommentRepository commentRepository;
+    private final  BoardRepository boardRepository;
+    private final  CommentRepository commentRepository;
 
     @Transactional(readOnly = true)
     public Page<Board> getPosts(Pageable pageable){return boardRepository.findAll(pageable);}

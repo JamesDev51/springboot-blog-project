@@ -3,7 +3,7 @@ package com.jamesdev.blog.config;
 import com.jamesdev.blog.config.auth.PrincipalDetailsService;
 import com.jamesdev.blog.handler.login.CustomAuthenticationFailureHandler;
 import com.jamesdev.blog.handler.login.CustomAuthenticationSuccessHandler;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,22 +21,16 @@ import javax.sql.DataSource;
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableWebSecurity
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public BCryptPasswordEncoder bCryptPasswordEncoder(){return new BCryptPasswordEncoder();}
 
-    @Autowired
-    private PrincipalDetailsService principalDetailsService;
-
-    @Autowired
-    private CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
-
-    @Autowired
-    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
-
-    @Autowired
-    private DataSource dataSource;
+    private final PrincipalDetailsService principalDetailsService;
+    private final CustomAuthenticationSuccessHandler customAuthenticationSuccessHandler;
+    private final CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+    private final DataSource dataSource;
 
 
     @Override

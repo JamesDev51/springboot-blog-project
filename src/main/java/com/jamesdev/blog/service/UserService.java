@@ -5,7 +5,7 @@ import com.jamesdev.blog.dto.UserSignUpRequestDto;
 import com.jamesdev.blog.model.RoleType;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+    private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Transactional
     public User findUserByEmail(String email) {

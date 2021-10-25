@@ -1,13 +1,13 @@
 package com.jamesdev.blog.controller.api;
 
-import com.jamesdev.blog.dto.UserEditRequestDto;
+import com.jamesdev.blog.dto.EmailDupCheckDto;
 import com.jamesdev.blog.dto.ResponseDto;
+import com.jamesdev.blog.dto.UserEditRequestDto;
 import com.jamesdev.blog.dto.UserSignUpRequestDto;
 import com.jamesdev.blog.model.User;
 import com.jamesdev.blog.service.UserService;
-import com.jamesdev.blog.dto.EmailDupCheckDto;
+import lombok.RequiredArgsConstructor;
 import net.minidev.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -21,10 +21,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 public class UserApiController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @PostMapping("/auth/api/checkEmailUsed")
     private ResponseDto<Integer> checkEmailUsed(@RequestBody EmailDupCheckDto emailDupCheckDto){
