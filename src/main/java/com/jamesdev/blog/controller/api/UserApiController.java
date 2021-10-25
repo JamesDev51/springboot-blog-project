@@ -28,6 +28,7 @@ public class UserApiController {
 
     @PostMapping("/auth/api/checkEmailUsed")
     private ResponseDto<Integer> checkEmailUsed(@RequestBody EmailDupCheckDto emailDupCheckDto){
+        System.out.println(emailDupCheckDto.toString());
         User user = userService.findUserByEmail(emailDupCheckDto.getEmail());
         if (user.equals(new User())){
             //빈 객체면 회원가입 계속 진행
